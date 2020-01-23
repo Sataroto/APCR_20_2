@@ -8,6 +8,7 @@ import java.io.*;
 import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 /**
  *
  * @author Alumno
@@ -15,28 +16,68 @@ import java.util.logging.Logger;
 public class ServidorTCP {
     private ServerSocket servidor;
     private Socket cliente;
-    private InputStream entrada;
-    private OutputStream salida;
+    private InputStream entrada;//Fluejo
+    private OutputStream salida;//Flujo
     private String ip, protocolo;
     private int puerto;
-    private DataInputStream mensajeEntrada;
-    private DataOutputStream mensajeSalida;
+    private DataInputStream mensajeEntrada;//mensaje
+    private DataOutputStream mensajeSalida;//mensaje
     
     public ServidorTCP(){
         try {
             puerto = 1234;
             servidor = new ServerSocket(puerto);
             System.out.println("Servidor a la escucha...");
+            while(true){
             cliente = servidor.accept();
             InetAddress ipCliente = cliente.getInetAddress();
             System.out.println("Se conecto: " + ipCliente.getHostAddress());
-            entrada = cliente.getInputStream();
-            salida = cliente.getOutputStream();
+
             // enviar mensaje al cliente
-            mensajeSalida = new DataOutputStream(salida);
-            mensajeSalida.writeChars("Voy por la banqueta Perro D:<");
+            if(enviar()){
+            cliente.close();
+            recibir();    
+            }
+            recibir();
+            }
+            
+            
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    } 
+    }
+    public boolean enviar(){
+        boolean cerrar=true;    
+        try {
+            
+            salida = cliente.getOutputStream();
+            String mensaje;
+            mensaje = JOptionPane.showInputDialog("Enviar Mensaje");
+            mensajeSalida = new DataOutputStream(salida);
+            if(mensaje.equals("")){
+                
+            }
+            else {
+                try {
+                    mensajeSalida.writeUTF(mensaje);
+                    cerrar=true;
+                } catch (IOException ex) {
+                    Logger.getLogger(ServidorTCP.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            return cerrar;
+        } catch (IOException ex) {
+            Logger.getLogger(ServidorTCP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return cerrar;
+        
+    }
+    public void recibir() throws IOException{
+            entrada = cliente.getInputStream();
+            mensajeEntrada = new DataInputStream(entrada);
+            System.out.println("Respuesta: "+this.mensajeEntrada.readUTF());
+    }
+    public static void main(String []asdas){
+        ServidorTCP prueba= new ServidorTCP();
+    }
 }
