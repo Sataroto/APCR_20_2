@@ -1,6 +1,7 @@
 package NIO;
+
 /*
-*Nombre: Gerardo Ayala Juárez
+*Nombre: Gerardo Ayala JuÃ¡rez
 *tema del programa: Transferencia de Archivos mediante SocketChannel
 *descripcion: Cliente Envia un archivo a socket de manera no blockeante y mediante un canal
 *fecha:12/2/2020
@@ -15,8 +16,8 @@ import java.nio.file.Path;
 
 import javax.swing.JFileChooser;
 
-public class cliente  {
-    public cliente() throws IOException{
+public class Cliente  {
+    public Cliente() throws IOException{
         JFileChooser j = new JFileChooser();//Un objeto que nos va permitir escojer un archivo
         j.showSaveDialog(null);//La forma de la seleccion del archivo
         SocketChannel cliente = SocketChannel.open();//La posibilidad de poder conectarse como cliente un servidor
@@ -37,7 +38,7 @@ public class cliente  {
     }
     
 public static void main(String[] args) throws IOException {
-    cliente cl = new cliente();
+    Cliente cl = new Cliente();
 }
     
 }

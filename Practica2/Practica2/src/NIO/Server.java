@@ -1,6 +1,7 @@
+
 package NIO;
 /*
-*Nombre: Gerardo Ayala Juárez
+*Nombre: Gerardo Ayala JuÃ¡rez
 *tema del programa: Transferencia de Archivos mediante SocketChannel
 *descripcion: Servidor recibe un archivo a socket de manera no bloqueante y mediante un canal
 *fecha:12/2/2020
@@ -35,8 +36,7 @@ public class Server {
             i++;//Para que genere un diferente nombre al archivo anterior mencionado
             System.out.println("Se conecto: "+client.getRemoteAddress());//Status de que se conecto el cliente.
             Path path = Paths.get("Recibido/archivo_"+i+".txt");//Declaramos la direccion del archivo que nos van a enviar
-            FileChannel fileChannel = FileChannel.open(path, EnumSet.of(StandardOpenOption.CREATE, 
-            StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE));//EStablecemos una secuencia o posibilidades, en caso de situaciones previstas.
+            FileChannel fileChannel = FileChannel.open(path, EnumSet.of(StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE));//EStablecemos una secuencia o posibilidades, en caso de situaciones previstas.
             ByteBuffer buffer = ByteBuffer.allocate(1024);//La via por las que vamos a enviar
             while(client.read(buffer)>0){//LE una linea del archivo
                     buffer.flip();//cambia el sentido del buffer
