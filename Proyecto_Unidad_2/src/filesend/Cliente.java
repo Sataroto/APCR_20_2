@@ -14,6 +14,9 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.Arrays;
 
+
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author sndmonreal
@@ -23,7 +26,7 @@ public class Cliente {
     static int serverPort;
     static String filename;
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws InterruptedException {
         try {
             int count = 0;
             int MAX_SIZE = 1048;
@@ -33,7 +36,7 @@ public class Cliente {
 
             byte[] sendData = new byte[MAX_SIZE];
 
-            String filePath = "archivo.txt";
+            String filePath = "archivo.pdf";
             File file = new File(filePath);
             FileInputStream fis = new FileInputStream(file);
 
@@ -57,35 +60,33 @@ public class Cliente {
             byte[] lastPack = new byte[lastPackLen - 1];
 
             fis.close();
-            
             byte[] enviar = new byte[32];
             String mensaje = noOfPackets+","+lastPackLen+",";
             enviar = mensaje.getBytes();
-            DatagramPacket sendPacket1 = new DatagramPacket(enviar, enviar.length, IpAddress, 1234);
-            clientSocket.send(sendPacket1);
+            DatagramPacket sendprinc = new DatagramPacket(enviar, enviar.length, IpAddress, 1234);
+            clientSocket.send(sendprinc);
             FileInputStream fis1 = new FileInputStream(file);
             
             while ((count = fis1.read(sendData)) != -1) {
                 if (noOfPackets <= 0) {
                     break;
                 }
-                System.out.println(new String(sendData));
                 DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IpAddress, 1234);
                 clientSocket.send(sendPacket);
-                System.out.println("último paquete enviado" + sendPacket);
+                System.out.println("Paquete: "+ noOfPackets);
                 noOfPackets--;
+                Thread.sleep(10);
+
             }
 
             System.out.println("\núltimo paquete\n");
-            System.out.println(new String(sendData));
-
             lastPack = Arrays.copyOf(sendData, lastPackLen);
-
             System.out.println("\nActual último paquete\n");
-            System.out.println(new String(lastPack));
-             sendPacket1 = new DatagramPacket(lastPack, lastPack.length, IpAddress, 1234);
+            DatagramPacket sendPacket1 = new DatagramPacket(lastPack, lastPack.length, IpAddress, 1234);
             clientSocket.send(sendPacket1);
-            System.out.println("último paquete enviado" + sendPacket1);
+            System.out.println("último paquete enviado");
+            clientSocket.close();
+
         } catch (SocketException e) {
             e.printStackTrace();
         } catch (IOException e) {
